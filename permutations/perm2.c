@@ -1,192 +1,91 @@
-#include "perm.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
-// int	ft_strlen(char *s)
-// {
-// 	int i = 0;
-// 	if (!s)
-// 		return (0);
-// 	while (s[i])
-// 		i++;
-// 	return (i);
-// }
+static void        swap(char *a, char *b)
+{
+        char tmp = *a;
+        *a = *b;
+        *b = tmp;
+}
 
-// char *ft_strdup(char *s)
-// {
-// 	int i = 0;
-// 	if (!s)
-// 		return (NULL);
-// 	char *tmp = malloc(sizeof(char) * ft_strlen(s));
-// 	if (!tmp)
-// 		return (NULL);
-// 	while (s[i])
-// 	{
-// 		tmp[i] = s[i];
-// 		i++;
-// 	}
-// 	tmp[i] = 0;
-// 	return (tmp);
-// }
+static void        sort_str_from(char *s, int from)
+{
+        int i = from;
+        int j;
+        char tmp;
 
-// void	ft_swap(char *a,char *b)
-// {
-// 	char tmp;
-// 	tmp = *a;
-// 	*a = *b;
-// 	*b = tmp;
-// }
+        while (s[i])
+        {
+                j = i + 1;
+                while (s[j])
+                {
+                        if (s[i] > s[j])
+                        {
+                                tmp = s[i];
+                                s[i] = s[j];
+                                s[j] = tmp;
+                        }
+                        j++;
+                }
+                i++;
+        }
+}
 
-// void	sort_str(char *str)
-// {
-// 	int i;
-// 	int j;
-// 	int	len = ft_strlen(str);
-// 	i = 0;
-// 	while (i < len -1)
-// 	{
-// 		j = 0;
-// 		while (j < len)
-// 		{
-// 			if (str[i] > str[j])
-// 				ft_swap(&str[i], &str[j]);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
+static void        print_str(char *s)
+{
+        int i = 0;
+        while (s[i])
+                i++;
+        write(1, s, i);
+        write(1, "\n", 1);
+}
 
-// void	print_str(char *str)
-// {
-// 	write(1, str, ft_strlen(str));
-// 	write(1, "\n", 1);
-// }
+static void        permute(char *s, int start)
+{
+        int i;
 
-// void	perm(char *str, int start)
-// {
-// 	int	i;
-// 	if (!str[start])
-// 	{
-// 		print_str(str);
-// 		return ;
-// 	}
-// 	i = start;
-// 	while (str[i])
-// 	{
-// 		ft_swap(str[start], str[i]);
-// 		perm(str, start + 1);
-// 		ft_swap(str[start], str[i]);
-// 		i++;
-// 	}
-// 	return ;
-// }
+        if (!s[start])
+        {
+                print_str(s);
+                return;
+        }
+        i = start;
+        while (s[i])
+        {
+                swap(&s[start], &s[i]);
+                sort_str_from(s, start + 1);
+                permute(s, start + 1);
+                i++;
+        }
+        sort_str_from(s, start);
+}
 
-// int	main(int ac, char **av)
-// {
-// 	char *str;
-// 	int start;
-// 	int	i;
+int        main(int argc, char **argv)
+{
+        char *str;
+        int i = 0;
 
-// 	i = 0;
-// 	start = 0;
-// 	if (ac != 2)
-// 		return (1);
-// 	str = ft_strdup(av[1]);
-// 	if (!str)
-// 		return (1);
-// 	sort_str(str);
-// 	perm(str, start);
-// 	return (0);
-// }
+        if (argc != 2)
+                return (0);
 
-// int	ft_strlen(char *str)
-// {
-// 	int i = 0;
-// 	while (str[i])
-// 		i++;
-// 	return (i);
-// }
-// char	*ft_strdup(char *str)
-// {
-// 	char *tmp;
-// 	int	len = ft_strlen(str);
-// 	int i = 0;
-// 	if (!str)
-// 		return (NULL);
-// 	tmp = malloc(sizeof(char) * len);
-// 	if (!tmp)
-// 		return (NULL);
-// 	while (i < len)
-// 	{
-// 		tmp[i] = str[i];
-// 		i++;
-// 	}
-// 	tmp[i] = 0;
-// 	return (tmp);
-// }
+        while (argv[1][i])
+                i++;
 
-// void	ft_swap(char *a, char *b)
-// {
-// 	char tmp;
+        str = malloc(i + 1);
+        if (!str)
+                return (0);
 
-// 	tmp = *a;
-// 	*a = *b;
-// 	*b = tmp; 
-// }
+        i = 0;
+        while (argv[1][i])
+        {
+                str[i] = argv[1][i];
+                i++;
+        }
+        str[i] = '\0';
 
-// void	sort(char *str)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	len;
-
-// 	i = 0;
-// 	len = ft_strlen(str);
-// 	while (i < len -1)
-// 	{
-// 		j = 0;
-// 		while (j < len)
-// 		{
-// 			if (str[i] > str[j])
-// 				ft_swap(&str[i], &str[j]);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
-
-// void	print_str(char *str)
-// {
-
-// 	write(1, str, ft_strlen(str));
-// 	write(1, "\n", 1);
-// }
-
-// void	perm(char *str, int start)
-// {
-// 	int	i;
-
-// 	if (!str[start])
-// 	{
-// 		print_str(str);
-// 		return ;
-// 	}
-// 	i = start;
-// 	while (str[i])
-// 	{
-// 		ft_swap(&str[start], &str[i]);
-// 		perm(str, start + 1);
-// 		ft_swap(&str[start], &str[i]);
-// 		i++;
-// 	}
-// }
-
-// int main(int ac, char **av)
-// {
-// 	char *str;
-// 	if (ac != 2)
-// 		return (1);
-// 	str = ft_strdup(av[1]);
-// 	if (!str)
-// 		return (1);
-// 	sort(str);
-// 	perm(str, 0);
-// }
+        sort_str_from(str, 0);
+        permute(str, 0);
+        free(str);
+        return (0);
+}
