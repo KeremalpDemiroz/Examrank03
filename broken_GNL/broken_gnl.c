@@ -1,6 +1,6 @@
 #include "broken_gnl.h"
 
-char	*ft_strchr(char *s, int c)
+char	ft_strchr(char *s, int c)
 {
 	int	i = 0;
 	while (s[i] != c)

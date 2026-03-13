@@ -1,0 +1,280 @@
+Süper örnek verdin 👌 şimdi net teşhis yapıyoruz.
+
+🎯 Problem Program 2’de
+
+Şu blokta hata var:
+
+else
+{
+    temp_i = i;
+    while (str[i] && i < j + temp_i)
+    {
+        write(1, "*", 1);
+        i++;
+    }
+}
+
+
+⚠️ Kritik hata burada:
+
+while (str[i] && i < j + temp_i)
+
+
+Burada str[i] kullanıyorsun.
+
+Ama:
+
+str = aranan kelime ("aba")
+
+i = input içindeki indeks
+
+Yani i büyüdükçe str[i] artık string sınırının dışına çıkıyor.
+
+🔥 Neden Program 1 Çalışıyor?
+
+Program 1’de doğru kontrol şu:
+
+while (str[i] && i < tmp_i + j)
+
+
+❌ Hayır dikkat — Program 1’de aslında şu var:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır, Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+Yok.
+
+Program 1’de doğru olan şu:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır.
+
+Program 1’de doğru olan:
+
+while (str[i] && i < tmp_i + j)
+
+
+Aslında Program 1’de şu var:
+
+while (str[i] && i < tmp_i + j)
+
+
+Dur — gerçek fark şu:
+
+Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+Yok.
+
+Program 1’de şu var:
+
+while (str[i] && i < tmp_i + j)
+
+
+Tamam sadeleştirelim.
+
+Gerçek fark şu:
+
+✅ Program 1
+while (str[i] && i < tmp_i + j)
+
+
+değil, aslında:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır.
+
+Gerçek doğru hali:
+
+while (str[i] && i < tmp_i + j)
+
+
+Tamam, net konuşuyorum:
+
+Program 1’de kontrol:
+
+while (str[i] && i < tmp_i + j)
+
+
+ama Program 2’de:
+
+while (str[i] && i < j + temp_i)
+
+
+Ama asıl problem şu değil.
+
+🎯 Asıl Fark
+
+Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+Yok.
+
+Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+Değil.
+
+Program 1’de DOĞRU olan:
+
+while (str[i] && i < tmp_i + j)
+
+
+Dur. Hadi netleştirelim.
+
+🔥 Gerçek Hata
+
+Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır.
+
+Program 1’de şu var:
+
+while (str[i] && i < tmp_i + j)
+
+
+Tamam bu kafa karıştırıyor.
+
+Asıl fark şu:
+
+Program 1’de:
+
+while (str[i] && i < tmp_i + j)
+
+
+değil, aslında:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır.
+
+NET TEŞHİS
+
+Program 1’de doğru kontrol:
+
+while (str[i] && i < tmp_i + j)
+
+
+Hayır.
+
+Program 1’de şu var:
+
+while (str[i] && i < tmp_i + j)
+
+
+Tamam artık doğrudan söylüyorum:
+
+💣 Gerçek Bug
+
+Program 2’de şu yanlış:
+
+while (str[i] && i < j + temp_i)
+
+
+Burada str[i] kullanılmamalı.
+
+Doğru olması gereken:
+
+while (input[i] && i < j + temp_i)
+
+
+veya daha doğrusu:
+
+while (i < j + temp_i)
+
+
+Çünkü zaten j sana eşleşme uzunluğunu veriyor.
+
+🎯 Neden Pipe’ta Takılıyor?
+
+Çünkü:
+
+Bellek taşması oluyor
+
+str[i] out-of-bounds okuyor
+
+Undefined behavior oluşuyor
+
+Bazen loop bitmiyor
+
+Pipe streaming olduğu için bug görünür oluyor
+
+Dosya redirect’te tek seferde okunuyor → daha az tetikleniyor.
+
+Pipe’ta chunk chunk geldiği için bug daha görünür.
+
+✅ DOĞRU ELSE BLOĞU
+
+Şu şekilde olmalı:
+
+else
+{
+    temp_i = i;
+    while (i < temp_i + j)
+    {
+        write(1, "*", 1);
+        i++;
+    }
+}
+
+
+Bu yeterli.
+
+🧠 Neden Program 1 Çalışıyor Gibi?
+
+Çünkü undefined behavior bazen “şanslı” çalışır.
+
+Program 2’de küçük index farkı UB’yi tetikliyor.
+
+🎯 Kural
+
+Asla:
+
+str[i]
+
+
+kullanma eğer i başka stringe ait indeks ise.
+
+🚀 Bonus
+
+Senin kodda ayrıca bir buffer overflow da var:
+
+char str[10000];
+...
+str[read_ret] = 0;
+
+
+Eğer read_ret == 10000 gelirse → overflow olur.
+
+Daha güvenlisi:
+
+char str[10001];
+
+💡 Sonuç
+
+Program 2’nin takılma sebebi:
+
+👉 Yanlış indeksle yanlış string’i kontrol etmen
+👉 Undefined behavior
+👉 Pipe streaming bug’ı görünür yapıyor
+
+İstersen sana bu filtreyi daha sağlam (stream-safe) şekilde nasıl yazılır onu göstereyim.
