@@ -11,19 +11,18 @@ void	backtracking(int *set, int set_size, int *subset, int sub_size, int index, 
 		while (i < sub_size)
 		{
 			printf("%d", subset[i]);
-			if (i != set_size -1)
+			if (i != sub_size -1)
 				printf(" ");
 			i++;
 		}
 		printf("\n");
 		return ;
 	}
-	i = index;
 	while (i < set_size)
 	{
 		subset[sub_size] = set[index];
 		backtracking(set, set_size, subset, sub_size + 1, i+1, sum + set[index], target);
-		i++;
+		index++;
 	}
 }
 
