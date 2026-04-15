@@ -146,8 +146,6 @@ int main(int ac, char **av)
 	if (ac != 2)
 		return (1);
 	n = atoi(av[1]);
-	if (n <= 3)
-		return (1);
 	board = malloc(sizeof(int) * n);
 	if (!board)
 		return (1);
